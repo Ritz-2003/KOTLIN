@@ -1,0 +1,88 @@
+#JAVA CODE
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    ListView listView;
+    Button button;
+    ArrayList<String> selectedItems = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        listView = findViewById(R.id.listView);
+        button = findViewById(R.id.button);
+
+        final ArrayList<String> groceryList = new ArrayList<>();
+        groceryList.add("Apples");
+        groceryList.add("Bananas");
+        groceryList.add("Oranges");
+        groceryList.add("Bread");
+        groceryList.add("Milk");
+        groceryList.add("Eggs");
+        groceryList.add("Cheese");
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_multiple_choice, groceryList);
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setAdapter(adapter);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedItems.clear();
+                for (int i = 0; i < listView.getCount(); i++) {
+                    if (listView.isItemChecked(i)) {
+                        selectedItems.add(groceryList.get(i));
+                    }
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+                for (String item : selectedItems) {
+                    stringBuilder.append(item).append("\n");
+                }
+
+                Toast.makeText(MainActivity.this, "Selected Items:\n" + stringBuilder.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+
+
+#XML CODE
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Print Selected Items" />
+
+</RelativeLayout>
